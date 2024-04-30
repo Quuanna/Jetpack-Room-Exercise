@@ -15,16 +15,15 @@ class WordViewModel(private val wordRepository: WordRepository) : ViewModel() {
     fun insert(word: Word) = viewModelScope.launch {
         wordRepository.insert(word)
     }
+}
 
-    inner class WordViewModelFactory(): ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return if (modelClass.isAssignableFrom(WordViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                WordViewModel(wordRepository) as T
-            } else {
-                 super.create(modelClass)
-            }
+class WordViewModelFactory(private val wordRepository: WordRepository): ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return if (modelClass.isAssignableFrom(WordViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            WordViewModel(wordRepository) as T
+        } else {
+            super.create(modelClass)
         }
     }
 }
-

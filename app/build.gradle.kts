@@ -30,12 +30,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
+
+    buildFeatures { viewBinding = true }
 }
 
 dependencies {
@@ -46,17 +48,16 @@ dependencies {
 
     // Room components
     implementation(libs.room.components.ktx)
+    implementation(libs.androidx.activity)
     ksp(libs.room.compiler)
     implementation(libs.room.testing)
 
     // Lifecycle components
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.common.java8)
 
-    // Kotlin components
-    api(libs.jetbrains.kotlinx.coroutines.core)
-    api(libs.jetbrains.kotlinx.coroutines.android)
+    // coroutine
+    implementation(libs.jetbrains.kotlinx.coroutines.android)
 
     // UI
     implementation(libs.androidx.constraintlayout)
@@ -64,7 +65,6 @@ dependencies {
 
     // Testing
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
