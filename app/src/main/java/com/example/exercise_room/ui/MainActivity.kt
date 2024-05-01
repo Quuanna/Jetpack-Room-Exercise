@@ -1,18 +1,19 @@
-package com.example.exercise_room
+package com.example.exercise_room.ui
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.exercise_room.MyApplication
+import com.example.exercise_room.ui.adapter.WordListAdapter
+import com.example.exercise_room.ui.viewModel.WordViewModel
+import com.example.exercise_room.ui.viewModel.WordViewModelFactory
+import com.example.exercise_room.database.Word
 import com.example.exercise_room.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

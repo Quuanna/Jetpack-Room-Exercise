@@ -1,4 +1,4 @@
-package com.example.exercise_room
+package com.example.exercise_room.ui
 
 import android.app.Activity
 import android.content.Intent

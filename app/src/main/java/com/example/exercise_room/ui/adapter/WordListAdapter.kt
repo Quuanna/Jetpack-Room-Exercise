@@ -1,10 +1,11 @@
-package com.example.exercise_room
+package com.example.exercise_room.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.exercise_room.database.Word
 import com.example.exercise_room.databinding.RecyclerviewItemBinding
 
 class WordListAdapter : ListAdapter<Word, WordListAdapter.WordViewHolder>(WordsComparator()) {

@@ -1,4 +1,4 @@
-package com.example.exercise_room
+package com.example.exercise_room.database
 
 import android.content.Context
 import androidx.room.Database
@@ -43,7 +43,7 @@ abstract class WordRoomDataBase : RoomDatabase() {
         suspend fun populateDatabase(wordDao: WordDao) {
             wordDao.deleteAll()
 
-            var word = Word("Add")
+            val word = Word("Add")
             wordDao.insert(word)
         }
     }
