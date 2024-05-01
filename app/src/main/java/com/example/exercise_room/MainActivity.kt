@@ -3,6 +3,7 @@ package com.example.exercise_room
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -17,7 +18,7 @@ import com.example.exercise_room.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val wordViewMode: WordViewModel by viewModels {
+    private val wordViewModel: WordViewModel by viewModels {
         WordViewModelFactory((application as MyApplication).repository)
     }
 
@@ -34,15 +35,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupObserved() {
+        wordViewModel.allWord.observe(this) { words ->
+            wordListAdapter.submitList(words)
+        }
+    }
+
     private fun lateInitSetup(callback: () -> Unit) {
         wordListAdapter = WordListAdapter()
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
                 if (activityResult.resultCode == Activity.RESULT_OK) {
                     val intent = activityResult.data
-                    // TODO　Handle the Intent
+                    intent?.getStringExtra(AddEditActivity.EXTRA_REPLY)?.let {
+                        val word = Word(it)
+                        wordViewModel.insert(word)
+                    }
                 }
             }
-
         callback()
     }
 
@@ -57,15 +66,7 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener(onClickEditListener())
     }
 
-    private fun setupObserved() {
-        wordViewMode.allWord.observe(this) { words ->
-            wordListAdapter.submitList(words)
-        }
-    }
-
     private fun onClickEditListener() = View.OnClickListener {
-        // TODO　編輯頁 > 使用 registerForActivityResult
         startForResult.launch(Intent(this, AddEditActivity::class.java))
-
     }
 }

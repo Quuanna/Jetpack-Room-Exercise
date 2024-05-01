@@ -30,10 +30,9 @@ abstract class WordRoomDataBase : RoomDatabase() {
         }
     }
 
-    private class WordRoomDataBaseCallBack(val scope: CoroutineScope) : RoomDatabase.Callback() {
+    private class WordRoomDataBaseCallBack(val scope: CoroutineScope) : Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
-            // 如果想在應用程式重新啟動時保留數據，請註解掉以下行
             INSTANCE?.let { dataBase ->
                 scope.launch(Dispatchers.IO) {
                     populateDatabase(dataBase.wordDao())
@@ -41,16 +40,10 @@ abstract class WordRoomDataBase : RoomDatabase() {
             }
         }
 
-        /**
-         * Populate the database in a new coroutine.
-         * If you want to start with more words, just add them.
-         */
         suspend fun populateDatabase(wordDao: WordDao) {
-            wordDao.deleteAll() // 如果不需清空在註解
+            wordDao.deleteAll()
 
-            var word = Word("Hello")
-            wordDao.insert(word)
-            word = Word("World!")
+            var word = Word("Add")
             wordDao.insert(word)
         }
     }

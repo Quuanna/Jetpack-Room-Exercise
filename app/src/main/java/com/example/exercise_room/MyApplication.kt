@@ -6,9 +6,8 @@ import kotlinx.coroutines.SupervisorJob
 
 class MyApplication: Application() {
 
-    val applicationScope = CoroutineScope(SupervisorJob()) // 無需取消此範圍，因為它會隨著該過程而被拆除
+    private val applicationScope = CoroutineScope(SupervisorJob())
+    private val dataBase by lazy { WordRoomDataBase.getDatabaseInstance(this, applicationScope) }
 
-    // 使用by lazy，等需要時才創立
-    val dataBase by lazy { WordRoomDataBase.getDatabaseInstance(this, applicationScope) }
     val repository by lazy { WordRepository(dataBase.wordDao()) }
 }
