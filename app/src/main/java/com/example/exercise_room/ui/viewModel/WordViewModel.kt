@@ -2,7 +2,6 @@ package com.example.exercise_room.ui.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.exercise_room.database.Word
@@ -17,15 +16,17 @@ class WordViewModel(private val wordRepository: WordRepository) : ViewModel() {
     fun insert(word: Word) = viewModelScope.launch {
         wordRepository.insert(word)
     }
-}
 
-class WordViewModelFactory(private val wordRepository: WordRepository): ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(WordViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            WordViewModel(wordRepository) as T
-        } else {
-            super.create(modelClass)
-        }
+    fun editUpdate(old: Word , word: Word) = viewModelScope.launch {
+        wordRepository.edit(old, word)
     }
+
+    fun delete(word: Word) = viewModelScope.launch {
+        wordRepository.delete(word)
+    }
+
+    fun deleteAll() = viewModelScope.launch {
+        wordRepository.deleteAll()
+    }
+
 }

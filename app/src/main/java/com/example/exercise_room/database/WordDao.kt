@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
@@ -20,16 +21,17 @@ interface WordDao {
     fun getAll(): Flow<List<Word>>
 
     @Query("SELECT * FROM word_table")
-    fun loadAllWords(): Array<Word>
+    fun loadAllWords(): Flow<List<Word>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(vararg word: Word)
 
     @Update
-    fun update(vararg word: Word)
+    suspend fun update(vararg word: Word)
     @Delete
-    fun delete(vararg word: Word)
+    suspend fun delete(vararg word: Word)
 
     @Query("DELETE FROM word_table")
     suspend fun deleteAll()
+
 }

@@ -4,17 +4,23 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.forEach
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.exercise_room.MyApplication
+import com.example.exercise_room.R
 import com.example.exercise_room.ui.adapter.WordListAdapter
 import com.example.exercise_room.ui.viewModel.WordViewModel
 import com.example.exercise_room.ui.viewModel.WordViewModelFactory
 import com.example.exercise_room.database.Word
 import com.example.exercise_room.databinding.ActivityMainBinding
+import com.example.exercise_room.ui.AddEditActivity.Companion.getActivityIntent
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var wordListAdapter: WordListAdapter
     private lateinit var startForResult: ActivityResultLauncher<Intent>
+    private var oldWord = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +50,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun lateInitSetup(callback: () -> Unit) {
-        wordListAdapter = WordListAdapter()
-        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        wordListAdapter = WordListAdapter(setItemClickListener())
+        startForResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
                 if (activityResult.resultCode == Activity.RESULT_OK) {
                     val intent = activityResult.data
-                    intent?.getStringExtra(AddEditActivity.EXTRA_REPLY)?.let {
-                        val word = Word(it)
-                        wordViewModel.insert(word)
+
+                   intent?.getStringExtra(AddEditActivity.EXTRA_REPLY)?.let {
+                        wordViewModel.insert(Word(it))
+                    }
+
+                    intent?.getStringExtra(AddEditActivity.EXTRA_UPDATE)?.let {
+                        wordViewModel.editUpdate(Word(oldWord), Word(it))
                     }
                 }
             }
@@ -57,17 +69,58 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        wordListAdapter = WordListAdapter()
-        val layout = LinearLayoutManager(this)
-        layout.orientation = LinearLayoutManager.VERTICAL
-        binding.recyclerview.apply {
-            layoutManager = layout
-            adapter = wordListAdapter
+        binding.apply {
+            val layout = LinearLayoutManager(this@MainActivity)
+            layout.orientation = LinearLayoutManager.VERTICAL
+            recyclerView.apply {
+                layoutManager = layout
+                adapter = wordListAdapter
+                addItemDecoration(DividerItemDecoration(this@MainActivity, RecyclerView.VERTICAL))
+            }
+            fab.setOnClickListener(onClickEditListener())
         }
-        binding.fab.setOnClickListener(onClickEditListener())
     }
 
     private fun onClickEditListener() = View.OnClickListener {
-        startForResult.launch(Intent(this, AddEditActivity::class.java))
+        startForResult.launch(getActivityIntent(this))
+    }
+
+    private fun setItemClickListener() = object : ((Int, String?) -> Unit) {
+        override fun invoke(position: Int, text: String?) {
+
+            binding.apply {
+                val slideUpAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_up)
+
+                bottomAppBar.apply {
+                    replaceMenu(R.menu.item_menu_bottom_app_bar)
+                    menu?.forEach { menuItem ->
+                        val iconView = bottomAppBar.findViewById<View>(menuItem.itemId)
+                        iconView.startAnimation(slideUpAnimation)
+                    }
+
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.edit -> {
+                                startForResult.launch(getActivityIntent(this@MainActivity, text.toString()))
+                                oldWord = text.toString()
+                                return@setOnMenuItemClickListener true
+                            }
+                            R.id.delete -> {
+                                text?.let {
+                                    wordViewModel.delete(Word(text))
+                                }
+                                return@setOnMenuItemClickListener true
+                            }
+                            R.id.deleteAll -> {
+                                wordViewModel.deleteAll()
+                                return@setOnMenuItemClickListener true
+                            }
+
+                            else -> return@setOnMenuItemClickListener false
+                        }
+                    };
+                }
+            }
+        }
     }
 }
