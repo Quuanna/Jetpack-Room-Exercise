@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var wordListAdapter: WordListAdapter
     private lateinit var startForResult: ActivityResultLauncher<Intent>
-    private var oldWord = ""
+    private lateinit var oldWord: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +56,12 @@ class MainActivity : AppCompatActivity() {
                 if (activityResult.resultCode == Activity.RESULT_OK) {
                     val intent = activityResult.data
 
-                   intent?.getStringExtra(AddEditActivity.EXTRA_REPLY)?.let {
-                        wordViewModel.insert(Word(it))
+                    intent?.getStringExtra(AddEditActivity.EXTRA_REPLY)?.let {
+                        wordViewModel.insert(Word(id = null, word = it))
                     }
 
                     intent?.getStringExtra(AddEditActivity.EXTRA_UPDATE)?.let {
-                        wordViewModel.editUpdate(Word(oldWord), Word(it))
+                        wordViewModel.editUpdate(oldWord, Word(word = it))
                     }
                 }
             }
@@ -89,7 +89,8 @@ class MainActivity : AppCompatActivity() {
         override fun invoke(position: Int, text: String?) {
 
             binding.apply {
-                val slideUpAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_up)
+                val slideUpAnimation =
+                    AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_up)
 
                 bottomAppBar.apply {
                     replaceMenu(R.menu.item_menu_bottom_app_bar)
@@ -101,20 +102,27 @@ class MainActivity : AppCompatActivity() {
                     setOnMenuItemClickListener { item ->
                         when (item.itemId) {
                             R.id.edit -> {
-                                startForResult.launch(getActivityIntent(this@MainActivity, text.toString()))
+                                startForResult.launch(
+                                    getActivityIntent(
+                                        this@MainActivity,
+                                        text.toString()
+                                    )
+                                )
                                 oldWord = text.toString()
                                 return@setOnMenuItemClickListener true
                             }
+
                             R.id.delete -> {
                                 text?.let {
-                                    wordViewModel.delete(Word(text))
+                                    wordViewModel.delete(Word(word = text))
                                 }
                                 return@setOnMenuItemClickListener true
                             }
-                            R.id.deleteAll -> {
-                                wordViewModel.deleteAll()
-                                return@setOnMenuItemClickListener true
-                            }
+
+//                            R.id.deleteAll -> {
+//                                wordViewModel.deleteAll()
+//                                return@setOnMenuItemClickListener true
+//                            }
 
                             else -> return@setOnMenuItemClickListener false
                         }

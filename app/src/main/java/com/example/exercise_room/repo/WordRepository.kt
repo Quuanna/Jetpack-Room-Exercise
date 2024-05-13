@@ -14,15 +14,20 @@ class WordRepository(private val wordDao: WordDao) {
         wordDao.insert(word)
     }
 
-    suspend fun edit(old: Word , word: Word) { // 更新資料需要先撈取要改變的資料
-        // TODO
-        wordDao.update(word)
+    // 更新資料需要先撈取要改變的資料
+    suspend fun edit(oldWord: String, word: Word) {
+        val old = wordDao.findById(oldWord)
+        old.word = word.word
+        wordDao.update(old)
     }
-    suspend fun delete(word: Word) {  // 刪除資料需要先撈取要刪除的資料
+
+    // 刪除資料需要先撈取要刪除的資料
+    suspend fun delete(word: Word) {
         wordDao.delete(word)
     }
 
-    suspend fun deleteAll() {  // 刪除資料需要先撈取要刪除的資料
+    // 刪除資料需要先撈取要刪除的資料
+    suspend fun deleteAll() {
         wordDao.deleteAll()
     }
 

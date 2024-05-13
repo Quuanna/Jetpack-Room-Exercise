@@ -17,8 +17,8 @@ class WordViewModel(private val wordRepository: WordRepository) : ViewModel() {
         wordRepository.insert(word)
     }
 
-    fun editUpdate(old: Word , word: Word) = viewModelScope.launch {
-        wordRepository.edit(old, word)
+    fun editUpdate(oldWord: String, word: Word) = viewModelScope.launch {
+        wordRepository.edit(oldWord, word)
     }
 
     fun delete(word: Word) = viewModelScope.launch {
