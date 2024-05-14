@@ -16,17 +16,17 @@ class WordRepository(private val wordDao: WordDao) {
 
     // 更新資料需要先撈取要改變的資料
     suspend fun edit(oldWord: String, word: Word) {
-        val old = wordDao.findById(oldWord)
+        val old = wordDao.findByData(oldWord)
         old.word = word.word
         wordDao.update(old)
     }
 
     // 刪除資料需要先撈取要刪除的資料
     suspend fun delete(word: Word) {
-        wordDao.delete(word)
+        val old = wordDao.findByData(word.word.toString())
+        wordDao.delete(old)
     }
 
-    // 刪除資料需要先撈取要刪除的資料
     suspend fun deleteAll() {
         wordDao.deleteAll()
     }

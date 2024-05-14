@@ -22,9 +22,8 @@ interface WordDao {
     @Query("SELECT * FROM word_table")
     fun loadAllWords(): Flow<List<Word>>
 
-
     @Query("SELECT * from word_table WHERE word = :item")
-    suspend fun findById(item: String): Word
+    suspend fun findByData(item: String): Word
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg word: Word)

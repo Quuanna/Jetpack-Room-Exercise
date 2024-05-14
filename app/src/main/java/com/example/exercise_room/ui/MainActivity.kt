@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         WordViewModelFactory((application as MyApplication).repository)
     }
 
+    private val recyclerView get() = binding.recyclerView
+    private val bottomAppBar get() = binding.bottomAppBar
+
     private lateinit var wordListAdapter: WordListAdapter
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     private lateinit var oldWord: String
@@ -69,16 +72,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        binding.apply {
-            val layout = LinearLayoutManager(this@MainActivity)
-            layout.orientation = LinearLayoutManager.VERTICAL
-            recyclerView.apply {
-                layoutManager = layout
-                adapter = wordListAdapter
-                addItemDecoration(DividerItemDecoration(this@MainActivity, RecyclerView.VERTICAL))
-            }
-            fab.setOnClickListener(onClickEditListener())
+        val layout = LinearLayoutManager(this@MainActivity)
+        layout.orientation = LinearLayoutManager.VERTICAL
+        recyclerView.apply {
+            layoutManager = layout
+            adapter = wordListAdapter
+            addItemDecoration(DividerItemDecoration(this@MainActivity, RecyclerView.VERTICAL))
         }
+        binding.fab.setOnClickListener(onClickEditListener())
     }
 
     private fun onClickEditListener() = View.OnClickListener {
@@ -87,48 +88,38 @@ class MainActivity : AppCompatActivity() {
 
     private fun setItemClickListener() = object : ((Int, String?) -> Unit) {
         override fun invoke(position: Int, text: String?) {
+            val slideUpAnimation =
+                AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_up)
+            bottomAppBar.apply {
+                replaceMenu(R.menu.item_menu_bottom_app_bar)
+                menu?.forEach { menuItem ->
+                    val iconView = findViewById<View>(menuItem.itemId)
+                    iconView.startAnimation(slideUpAnimation)
+                }
+                performShow(true)
 
-            binding.apply {
-                val slideUpAnimation =
-                    AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_up)
-
-                bottomAppBar.apply {
-                    replaceMenu(R.menu.item_menu_bottom_app_bar)
-                    menu?.forEach { menuItem ->
-                        val iconView = bottomAppBar.findViewById<View>(menuItem.itemId)
-                        iconView.startAnimation(slideUpAnimation)
-                    }
-
-                    setOnMenuItemClickListener { item ->
-                        when (item.itemId) {
-                            R.id.edit -> {
-                                startForResult.launch(
-                                    getActivityIntent(
-                                        this@MainActivity,
-                                        text.toString()
-                                    )
-                                )
-                                oldWord = text.toString()
-                                return@setOnMenuItemClickListener true
-                            }
-
-                            R.id.delete -> {
-                                text?.let {
-                                    wordViewModel.delete(Word(word = text))
-                                }
-                                return@setOnMenuItemClickListener true
-                            }
-
-//                            R.id.deleteAll -> {
-//                                wordViewModel.deleteAll()
-//                                return@setOnMenuItemClickListener true
-//                            }
-
-                            else -> return@setOnMenuItemClickListener false
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.edit -> {
+                            startForResult.launch(getActivityIntent(this@MainActivity, text.toString()))
+                            oldWord = text.toString()
+                            performHide(true)
+                            return@setOnMenuItemClickListener true
                         }
-                    };
+
+                        R.id.delete -> {
+                            text?.let {
+                                wordViewModel.delete(Word(word = it))
+                            }
+                            performHide(true)
+                            return@setOnMenuItemClickListener true
+                        }
+
+                        else -> return@setOnMenuItemClickListener false
+                    }
                 }
             }
         }
     }
+
 }
