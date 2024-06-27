@@ -6,13 +6,20 @@
     <item
         android:id="@+id/edit"
         android:icon="@drawable/ic_edit"
-        android:title="編輯"
+        android:title="@string/menu_edit"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/remove"
+        android:icon="@mipmap/ic_remove"
+        android:title="@string/menu_single_remove"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/delete"
         android:icon="@drawable/ic_delete"
-        android:title="修改"
-        app:showAsAction="always"/>
+        android:title="@string/menu_all_delete"
+        app:showAsAction="ifRoom" />
+
 
 </menu>

@@ -19,7 +19,7 @@ class AddEditActivity : AppCompatActivity() {
         const val EXTRA_UPDATE = "EXTRA_UPDATE"
         const val INTENT_KEY = "INTENT_KEY"
 
-        fun getActivityIntent(context: Context, text: String? = null): Intent {
+        fun getActivityIntent(context: Context, text: String?): Intent {
             return Intent(context, AddEditActivity::class.java).putExtra(INTENT_KEY, text)
         }
     }

@@ -64,7 +64,9 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     intent?.getStringExtra(AddEditActivity.EXTRA_UPDATE)?.let {
-                        wordViewModel.editUpdate(oldWord, Word(word = it))
+                        if (oldWord.isNotEmpty()) {
+                            wordViewModel.editUpdate(oldWord, Word(word = it))
+                        }
                     }
                 }
             }
@@ -79,17 +81,13 @@ class MainActivity : AppCompatActivity() {
             adapter = wordListAdapter
             addItemDecoration(DividerItemDecoration(this@MainActivity, RecyclerView.VERTICAL))
         }
-        binding.fab.setOnClickListener(onClickEditListener())
-    }
-
-    private fun onClickEditListener() = View.OnClickListener {
-        startForResult.launch(getActivityIntent(this))
+        binding.fab.setOnClickListener { openAddEditActivity() }
     }
 
     private fun setItemClickListener() = object : ((Int, String?) -> Unit) {
         override fun invoke(position: Int, text: String?) {
-            val slideUpAnimation =
-                AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_up)
+            val slideUpAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_up)
+
             bottomAppBar.apply {
                 replaceMenu(R.menu.item_menu_bottom_app_bar)
                 menu?.forEach { menuItem ->
@@ -97,20 +95,23 @@ class MainActivity : AppCompatActivity() {
                     iconView.startAnimation(slideUpAnimation)
                 }
                 performShow(true)
-
                 setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.edit -> {
-                            startForResult.launch(getActivityIntent(this@MainActivity, text.toString()))
+                            openAddEditActivity(text.toString())
                             oldWord = text.toString()
                             performHide(true)
                             return@setOnMenuItemClickListener true
                         }
 
+                        R.id.remove -> {
+                            text?.let { wordViewModel.delete(Word(word = it)) }
+                            performHide(true)
+                            return@setOnMenuItemClickListener true
+                        }
+
                         R.id.delete -> {
-                            text?.let {
-                                wordViewModel.delete(Word(word = it))
-                            }
+                            text?.let { wordViewModel.deleteAll() }
                             performHide(true)
                             return@setOnMenuItemClickListener true
                         }
@@ -120,6 +121,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun openAddEditActivity(text: String? = null) {
+        startForResult.launch(getActivityIntent(this@MainActivity, text))
     }
 
 }
