@@ -28,15 +28,12 @@ class AddEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        intent.getStringExtra(INTENT_KEY)?.let {
+        intent?.getStringExtra(INTENT_KEY)?.let {
             editWordView.setText(it)
-            binding.buttonSave.isVisible = false
-            binding.buttonUpdate.isVisible = true
-        }?: {
-            binding.buttonSave.isVisible = true
-            binding.buttonUpdate.isVisible = false
-        }
+            setVisibility(true)
+        }?: setVisibility(false)
 
+        intent.removeExtra(INTENT_KEY)
         binding.buttonSave.setOnClickListener(onClickListener(EXTRA_REPLY))
         binding.buttonUpdate.setOnClickListener(onClickListener(EXTRA_UPDATE))
     }
@@ -50,5 +47,15 @@ class AddEditActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK, replyIntent)
         }
         finish()
+    }
+
+    private fun setVisibility(isUpdate: Boolean) {
+        if (isUpdate) {
+            binding.buttonSave.isVisible = false
+            binding.buttonUpdate.isVisible = true
+        } else {
+            binding.buttonSave.isVisible = true
+            binding.buttonUpdate.isVisible = false
+        }
     }
 }
