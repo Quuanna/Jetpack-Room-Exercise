@@ -6,11 +6,19 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.exercise_room.database.Word
 import com.example.exercise_room.repo.WordRepositoryImpl
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class WordViewModel(private val wordRepository: WordRepositoryImpl) : ViewModel() {
 
-    val allWord: LiveData<List<Word>> = wordRepository.allWords.asLiveData()
+    val allWord: LiveData<List<Word>> = wordRepository.allWords()
+        .map { result ->
+        if (result.isSuccess) {
+            result.getOrDefault(emptyList())
+        } else {
+            emptyList()
+        }
+    }.asLiveData()
 
     fun insert(word: Word) = viewModelScope.launch {
         wordRepository.insert(word)
