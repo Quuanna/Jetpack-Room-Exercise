@@ -7,11 +7,4 @@
 
     <style name="Theme.Exerciseroom" parent="Base.Theme.Exerciseroom" />
 
-    <!-- The default font for RecyclerView items is too small.
-       The margin is a simple delimiter between the words. -->
-    <style name="word_title">
-        <item name="android:layout_marginBottom">8dp</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
-    </style>
 </resources>

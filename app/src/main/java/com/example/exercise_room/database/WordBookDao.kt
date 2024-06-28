@@ -14,16 +14,13 @@ import kotlinx.coroutines.flow.Flow
  * - @Query、@Insert、@Delete、@Update
  */
 @Dao
-interface WordDao {
+interface WordBookDao {
 
-    @Query("SELECT * FROM word_table ORDER BY word ASC")
-    fun getAll(): Flow<List<Word>>
+    @Query("SELECT * FROM word_book_table ORDER BY enWord ASC")
+    fun getAllWord(): Flow<List<Word>>
 
-    @Query("SELECT * FROM word_table")
+    @Query("SELECT * FROM word_book_table")
     fun loadAllWords(): Flow<List<Word>>
-
-    @Query("SELECT * from word_table WHERE word = :item")
-    suspend fun findByData(item: String): Word
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg word: Word)
@@ -34,7 +31,7 @@ interface WordDao {
     @Delete
     suspend fun delete(vararg word: Word)
 
-    @Query("DELETE FROM word_table")
+    @Query("DELETE FROM word_book_table")
     suspend fun deleteAll()
 
 

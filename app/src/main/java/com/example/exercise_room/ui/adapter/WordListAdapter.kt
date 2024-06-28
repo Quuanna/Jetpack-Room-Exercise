@@ -25,7 +25,7 @@ class WordListAdapter(
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current.word)
+        holder.bind(current.enWord)
     }
 
     inner class WordViewHolder(private val binding: ItemRecyclerViewBinding) :
@@ -42,13 +42,11 @@ class WordListAdapter(
 
     class WordsComparator : DiffUtil.ItemCallback<Word>() {
         override fun areItemsTheSame(oldItem: Word, newItem: Word): Boolean {
-            return oldItem === newItem
+            return oldItem.id == newItem.id
         }
-
         override fun areContentsTheSame(oldItem: Word, newItem: Word): Boolean {
-            return oldItem.word == newItem.word
+            return oldItem == newItem
         }
     }
-
 
 }

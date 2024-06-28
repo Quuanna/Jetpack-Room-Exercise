@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -20,6 +21,8 @@ import com.example.exercise_room.ui.viewModel.WordViewModel
 import com.example.exercise_room.ui.viewModel.WordViewModelFactory
 import com.example.exercise_room.database.Word
 import com.example.exercise_room.databinding.ActivityMainBinding
+import com.example.exercise_room.ui.AddEditActivity.Companion.EXTRA_REPLY
+import com.example.exercise_room.ui.AddEditActivity.Companion.EXTRA_UPDATE
 import com.example.exercise_room.ui.AddEditActivity.Companion.getActivityIntent
 
 class MainActivity : AppCompatActivity() {
@@ -34,7 +37,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var wordListAdapter: WordListAdapter
     private lateinit var startForResult: ActivityResultLauncher<Intent>
-    private lateinit var oldWord: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,28 +50,36 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupObserved() {
         wordViewModel.allWord.observe(this) { words ->
-            wordListAdapter.submitList(words)
+            if (words.isEmpty()) {
+                // 空列表
+                Toast.makeText(this, "空列表", Toast.LENGTH_SHORT).show()
+            } else {
+                wordListAdapter.submitList(words)
+            }
         }
     }
 
     private fun lateInitSetup(callback: () -> Unit) {
         wordListAdapter = WordListAdapter(setItemClickListener())
-        startForResult =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-                if (activityResult.resultCode == Activity.RESULT_OK) {
-                    val intent = activityResult.data
+        startForResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { activityResult ->
 
-                    intent?.getStringExtra(AddEditActivity.EXTRA_REPLY)?.let {
-                        wordViewModel.insert(Word(id = null, word = it))
+            if (activityResult.resultCode == Activity.RESULT_OK) {
+
+                activityResult.data?.run {
+                    getStringExtra(EXTRA_REPLY)?.let {
+                        wordViewModel.insert(Word(id = null, enWord = it))
+                    }
+                    getStringExtra(EXTRA_UPDATE)?.let {
+                        wordViewModel.editUpdate(Word(enWord = it))
                     }
 
-                    intent?.getStringExtra(AddEditActivity.EXTRA_UPDATE)?.let {
-                        if (oldWord.isNotEmpty()) {
-                            wordViewModel.editUpdate(oldWord, Word(word = it))
-                        }
-                    }
+                    removeExtra(EXTRA_REPLY)
+                    removeExtra(EXTRA_UPDATE)
                 }
             }
+        }
         callback()
     }
 
@@ -99,19 +109,23 @@ class MainActivity : AppCompatActivity() {
                     when (item.itemId) {
                         R.id.edit -> {
                             openAddEditActivity(text.toString())
-                            oldWord = text.toString()
                             performHide(true)
                             return@setOnMenuItemClickListener true
                         }
 
                         R.id.remove -> {
-                            text?.let { wordViewModel.delete(Word(word = it)) }
+                            val list = wordListAdapter.currentList.toMutableList()
+                            val wordToDelete = list[position]
+                            wordViewModel.delete(wordToDelete)
+                            list.remove(wordToDelete)
+                            wordListAdapter.submitList(list) // 更新列表
                             performHide(true)
                             return@setOnMenuItemClickListener true
                         }
 
                         R.id.delete -> {
                             text?.let { wordViewModel.deleteAll() }
+                            wordListAdapter.submitList(arrayListOf())
                             performHide(true)
                             return@setOnMenuItemClickListener true
                         }
