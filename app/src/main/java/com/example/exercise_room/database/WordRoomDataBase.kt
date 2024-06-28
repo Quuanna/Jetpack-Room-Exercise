@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Database(entities = [Word::class], version = 1)
@@ -38,14 +37,19 @@ abstract class WordRoomDataBase : RoomDatabase() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             INSTANCE?.let { database ->
-                coroutineScope.launch(Dispatchers.IO) {
-                    initDefaultData(database.wordBookDao())
+                coroutineScope.launch {
+                    val wordDatabase = database.wordBookDao()
+                    wordDatabase.deleteAll()
+
+                    var word = Word(englishWord = "Hello")
+                    wordDatabase.insert(word)
+                    word = Word(englishWord = "world")
+                    wordDatabase.insert(word)
+                    word = Word(englishWord = "TODO ADD")
+                    wordDatabase.insert(word)
                 }
             }
         }
 
-        private suspend fun initDefaultData(dao: WordBookDao) {
-            dao.insert(Word(enWord = "1", chWord = "新增"))
-        }
     }
 }

@@ -44,11 +44,11 @@ class MainActivity : AppCompatActivity() {
 
         lateInitSetup {
             initView()
-            setupObserved()
+            setupDateObserved()
         }
     }
 
-    private fun setupObserved() {
+    private fun setupDateObserved() {
         wordViewModel.allWord.observe(this) { words ->
             if (words.isEmpty()) {
                 // 空列表
@@ -69,10 +69,10 @@ class MainActivity : AppCompatActivity() {
 
                 activityResult.data?.run {
                     getStringExtra(EXTRA_REPLY)?.let {
-                        wordViewModel.insert(Word(id = null, enWord = it))
+                        wordViewModel.insert(Word(englishWord = it))
                     }
                     getStringExtra(EXTRA_UPDATE)?.let {
-                        wordViewModel.editUpdate(Word(enWord = it))
+                        wordViewModel.editUpdate(Word(englishWord = it))
                     }
 
                     removeExtra(EXTRA_REPLY)
