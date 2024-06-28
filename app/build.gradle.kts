@@ -1,5 +1,3 @@
-
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -49,8 +47,14 @@ dependencies {
     // Room components
     implementation(libs.room.components.ktx)
     implementation(libs.androidx.activity)
+
     ksp(libs.room.compiler)
-    implementation(libs.room.testing)
+
+    testImplementation(libs.room.testing)
+    annotationProcessor(libs.room.compiler)
+
+    // test Flow
+    androidTestImplementation(libs.test.turbine)
 
     // Lifecycle components
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -65,6 +69,15 @@ dependencies {
 
     // Testing
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.arch)
+
+//    androidTestImplementation(libs.androidx.runner)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.jetbrains.kotlinx.coroutines.test)
+
+    // AndroidX Test - JVM testing、Instrumented testing
+    testImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.junit4)
+    androidTestImplementation(libs.androidx.junit.ktx)
+
 }

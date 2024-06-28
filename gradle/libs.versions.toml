@@ -5,23 +5,34 @@ kotlin = "1.9.22"
 coreKtx = "1.13.0"
 
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
+archCore = "2.1.0"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
 appcompat = "1.6.1"
 material = "1.11.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
 
 roomVersion = "2.6.1"
-lifecycleVersion = '2.7.0'
-coroutines = '1.8.0'
+lifecycleVersion = '2.8.2'
+coroutines = '1.6.4'
 activityVersion = "1.9.0"
+testturbine = '1.1.0'
+runner = "1.6.1"
+androidxTestCore = "1.5.0"
+junitKtx = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+
+androidx-arch = { group = "androidx.arch.core", name = "core-testing", version.ref = "archCore" }
+androidx-junit4 = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
+#androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+androidx-test-core = { group = "androidx.test", name = "core-ktx", version.ref = "androidxTestCore"}
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
@@ -32,7 +43,11 @@ room-testing = { group = "androidx.room", name = "room-testing", version.ref ="r
 androidx-lifecycle-viewmodel-ktx = {group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleVersion"}
 androidx-lifecycle-livedata-ktx = {group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleVersion"}
 jetbrains-kotlinx-coroutines-android = {group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines"}
+jetbrains-kotlinx-coroutines-test = {group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines"}
+
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activityVersion" }
+test-turbine = {group = "app.cash.turbine", name = "turbine", version.ref = "testturbine"}
+
 
 
 [plugins]

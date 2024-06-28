@@ -37,5 +37,7 @@ interface WordBookDao {
     @Query("DELETE FROM word_book_table")
     suspend fun deleteAll()
 
+    @Query("SELECT * FROM word_book_table WHERE englishWord = :englishWord")
+    suspend fun getWordByEnWord(englishWord: String): Word?
 
 }
