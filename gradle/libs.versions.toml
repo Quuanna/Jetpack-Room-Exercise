@@ -1,25 +1,24 @@
 [versions]
-agp = "8.3.0"
-ksp = "1.9.23-1.0.20"
-kotlin = "1.9.22"
-coreKtx = "1.13.0"
+agp = "8.3.2"
+ksp = "1.9.24-1.0.20"
+kotlin = "1.9.24"
+coreKtx = "1.13.1"
 
 junit = "4.13.2"
-archCore = "2.1.0"
+archCore = "2.2.0"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-appcompat = "1.6.1"
-material = "1.11.0"
+appcompat = "1.7.0"
+material = "1.12.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
 
 roomVersion = "2.6.1"
 lifecycleVersion = '2.8.2'
-coroutines = '1.6.4'
+coroutines = '1.8.1'
 activityVersion = "1.9.0"
 testturbine = '1.1.0'
-runner = "1.6.1"
-androidxTestCore = "1.5.0"
+androidxTestCore = "1.6.1"
 junitKtx = "1.2.1"
 
 [libraries]
@@ -29,7 +28,6 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-arch = { group = "androidx.arch.core", name = "core-testing", version.ref = "archCore" }
 androidx-junit4 = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
-#androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-test-core = { group = "androidx.test", name = "core-ktx", version.ref = "androidxTestCore"}
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
@@ -47,7 +45,6 @@ jetbrains-kotlinx-coroutines-test = {group = "org.jetbrains.kotlinx", name = "ko
 
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activityVersion" }
 test-turbine = {group = "app.cash.turbine", name = "turbine", version.ref = "testturbine"}
-
 
 
 [plugins]

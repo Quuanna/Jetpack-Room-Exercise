@@ -45,16 +45,10 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
 
     // Room components
-    implementation(libs.room.components.ktx)
     implementation(libs.androidx.activity)
-
-    ksp(libs.room.compiler)
-
-    testImplementation(libs.room.testing)
     annotationProcessor(libs.room.compiler)
-
-    // test Flow
-    androidTestImplementation(libs.test.turbine)
+    ksp(libs.room.compiler)
+    implementation(libs.room.components.ktx)
 
     // Lifecycle components
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -67,15 +61,16 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
 
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.arch)
-
-//    androidTestImplementation(libs.androidx.runner)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.jetbrains.kotlinx.coroutines.test)
 
-    // AndroidX Test - JVM testing、Instrumented testing
+    androidTestImplementation(libs.test.turbine)
+    androidTestImplementation(libs.jetbrains.kotlinx.coroutines.test)
+    testImplementation(libs.room.testing)
+
     testImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.junit4)
     androidTestImplementation(libs.androidx.junit.ktx)
