@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 /**
  * 目前只搜尋特定欄位，提高索引效率
@@ -17,4 +18,4 @@ data class Word(
     @ColumnInfo val wordType: String= "",
     @ColumnInfo val describe: String= "",
     @ColumnInfo val example: String= ""
-)
+):Serializable

@@ -21,7 +21,8 @@ import com.example.exercise_room.ui.viewModel.WordViewModel
 import com.example.exercise_room.ui.viewModel.WordViewModelFactory
 import com.example.exercise_room.database.Word
 import com.example.exercise_room.databinding.ActivityMainBinding
-import com.example.exercise_room.ui.AddEditActivity.Companion.EXTRA_REPLY
+import com.example.exercise_room.serializable
+import com.example.exercise_room.ui.AddEditActivity.Companion.EXTRA_ADD
 import com.example.exercise_room.ui.AddEditActivity.Companion.EXTRA_UPDATE
 import com.example.exercise_room.ui.AddEditActivity.Companion.getActivityIntent
 
@@ -68,14 +69,14 @@ class MainActivity : AppCompatActivity() {
             if (activityResult.resultCode == Activity.RESULT_OK) {
 
                 activityResult.data?.run {
-                    getStringExtra(EXTRA_REPLY)?.let {
+                    getStringExtra(EXTRA_ADD)?.let {
                         wordViewModel.insert(Word(englishWord = it))
                     }
-                    getStringExtra(EXTRA_UPDATE)?.let {
-                        wordViewModel.editUpdate(Word(englishWord = it))
+                    extras?.serializable<Word>(EXTRA_UPDATE)?.let {
+                        wordViewModel.editUpdate(it)
                     }
 
-                    removeExtra(EXTRA_REPLY)
+                    removeExtra(EXTRA_ADD)
                     removeExtra(EXTRA_UPDATE)
                 }
             }
@@ -94,8 +95,8 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener { openAddEditActivity() }
     }
 
-    private fun setItemClickListener() = object : ((Int, String?) -> Unit) {
-        override fun invoke(position: Int, text: String?) {
+    private fun setItemClickListener() = object : ((Int, Word?) -> Unit) {
+        override fun invoke(position: Int, dbItem: Word?) {
             val slideUpAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_up)
 
             bottomAppBar.apply {
@@ -108,7 +109,7 @@ class MainActivity : AppCompatActivity() {
                 setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.edit -> {
-                            openAddEditActivity(text.toString())
+                            openAddEditActivity(dbItem)
                             performHide(true)
                             return@setOnMenuItemClickListener true
                         }
@@ -124,7 +125,7 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         R.id.delete -> {
-                            text?.let { wordViewModel.deleteAll() }
+                            wordViewModel.deleteAll()
                             wordListAdapter.submitList(arrayListOf())
                             performHide(true)
                             return@setOnMenuItemClickListener true
@@ -137,8 +138,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun openAddEditActivity(text: String? = null) {
-        startForResult.launch(getActivityIntent(this@MainActivity, text))
+    private fun openAddEditActivity(item: Word? = null) {
+        startForResult.launch(getActivityIntent(this@MainActivity, item))
     }
 
 }

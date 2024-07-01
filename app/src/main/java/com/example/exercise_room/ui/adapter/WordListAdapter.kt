@@ -9,7 +9,7 @@ import com.example.exercise_room.database.Word
 import com.example.exercise_room.databinding.ItemRecyclerViewBinding
 
 class WordListAdapter(
-    private val onItemOnClickListener: ((Int, String?) -> Unit)? = null
+    private val onItemOnClickListener: ((Int, Word) -> Unit)? = null
 ) : ListAdapter<Word, WordListAdapter.WordViewHolder>(WordsComparator()) {
 
 
@@ -24,17 +24,17 @@ class WordListAdapter(
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        val current = getItem(position)
-        holder.bind(current.englishWord)
+        val db = getItem(position)
+        holder.bind(db)
     }
 
     inner class WordViewHolder(private val binding: ItemRecyclerViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(text: String?) {
+        fun bind(item: Word) {
             binding.textView.apply {
-                this.text = text
+                this.text = item.englishWord
                 setOnClickListener {
-                    onItemOnClickListener?.invoke(adapterPosition, text)
+                    onItemOnClickListener?.invoke(adapterPosition, item)
                 }
             }
         }
@@ -45,7 +45,7 @@ class WordListAdapter(
             return oldItem == newItem
         }
         override fun areContentsTheSame(oldItem: Word, newItem: Word): Boolean {
-            return oldItem.englishWord == newItem.englishWord
+            return oldItem.id == newItem.id
         }
     }
 
