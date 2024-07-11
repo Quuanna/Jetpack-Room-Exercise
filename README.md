@@ -1,4 +1,4 @@
-![螢幕擷取畫面 2024-06-28 102312](https://github.com/Quuanna/Jetpack-Room-Exercise/assets/36694083/651af0ae-f3a0-49e9-8687-8596a020bbb9)
+
 
 ## Room是關聯式資料庫
 > Room 是[關聯式資料庫](https://zh.wikipedia.org/zh-tw/%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93) **RDBMS**(Relational Database Management System)的資料庫，建立在[關聯式模型](https://zh.wikipedia.org/wiki/%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B)，由資料結構、操作集合、完整性約束三部分組合，使用標準資料查詢語言[SQL](https://zh.wikipedia.org/wiki/SQL)就是一種基於關聯式資料庫的語言，語言執行對關聯式資料庫的檢索和操作。
