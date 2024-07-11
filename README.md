@@ -1,6 +1,3 @@
-
-![Room](https://github.com/Quuanna/Jetpack-Room-Exercise/assets/36694083/9891b236-cf6f-4db1-8ed5-bf0502c59acd)
-
 ## Room是關聯式資料庫
 > Room 是[關聯式資料庫](https://zh.wikipedia.org/zh-tw/%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93) **RDBMS**(Relational Database Management System)的資料庫，建立在[關聯式模型](https://zh.wikipedia.org/wiki/%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B)，由資料結構、操作集合、完整性約束三部分組合，使用標準資料查詢語言[SQL](https://zh.wikipedia.org/wiki/SQL)就是一種基於關聯式資料庫的語言，語言執行對關聯式資料庫的檢索和操作。
 ### 1.何謂關聯式資料庫(RDBMS)
@@ -16,9 +13,16 @@
 > Room之所以是關聯式資料庫，因為它使用表格儲存數據，每個table都需要定義@PrimaryKey，透過使用SQL進行操作和查詢管理，依靠底層SQLite處理這些操作，使得Room使用起來簡單且高效。
 > [Room禁止資料表物件互相參照](https://developer.android.com/training/data-storage/room/referencing-data?hl=zh-tw#understand-no-object-references)，須明確要求應用程式所需的資料
 
-### 3.延伸議題
-1. 非關聯型的[NOSQL](https://zh.wikipedia.org/wiki/NoSQL#)，強調Key-value儲存和文件導向資料庫的優點
-2. [RDBMS vs NOSQL](https://medium.com/@eric248655665/rdbms-vs-nosql-%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB-vs-%E9%9D%9E%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB-1423c9fbb91a)
+### 3. Room 特性和優勢
+![Room](https://github.com/Quuanna/Jetpack-Room-Exercise/assets/36694083/dd62acdb-8a42-40a0-ad7e-960f85abe6a6)
+
+優勢
+1. 簡化資料庫操作:Room提供抽象層來降低SQL的複雜性，使用簡單化。
+2. 提升應用程式可靠性: Room提供Annotation自動產生SQL語法但Query仍需要一些SQL語法，所以在compile time時檢查 SQL Query 語法，避免在run time時發生閃退，提高穩定可靠性。
+3. 確保資料一致性:確保資料庫和資料物件之間是互應的。
+4. 提升開發效率:因簡化操作，加快開發流程
+5. 易維護:Room使用方式與程式結構清晰，降低維護成本
+
 ---
 
 ## Room 的三個主要元件
@@ -86,6 +90,9 @@ abstract class WordRoomDataBase : RoomDatabase() {
     }
 }
 ```
+# 延伸議題
+1. 非關聯型的[NOSQL](https://zh.wikipedia.org/wiki/NoSQL#)，強調Key-value儲存和文件導向資料庫的優點
+2. [RDBMS vs NOSQL](https://medium.com/@eric248655665/rdbms-vs-nosql-%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB-vs-%E9%9D%9E%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB-1423c9fbb91a)
 
 # 參考資料來源
 1. [Define data using Room entities](https://developer.android.com/training/data-storage/room/defining-data)
