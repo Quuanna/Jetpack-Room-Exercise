@@ -15,6 +15,7 @@
 
 ### 3. Room 特性和優勢
 ![Room](https://github.com/Quuanna/Jetpack-Room-Exercise/assets/36694083/554e00d9-bc97-486a-bab4-228be905061c)
+
 **優勢**
 1. 簡化資料庫操作:Room提供抽象層來降低SQL的複雜性，使用簡單化。
 2. 提升應用程式可靠性: Room提供Annotation自動產生SQL語法但Query仍需要一些SQL語法，所以在compile time時檢查 SQL Query 語法，避免在run time時發生閃退，提高穩定可靠性。
